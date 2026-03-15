@@ -43,6 +43,12 @@ export interface ConfigSchedule {
 export interface ConfigAutonomy {
   /** "draft" opens PRs as draft; "publish" opens them as ready-for-review. */
   prMode: "draft" | "publish";
+  /**
+   * Maximum number of added + deleted lines the orchestrator will accept in
+   * the agent's diff before rejecting it. Diffs exceeding this limit are
+   * logged and skipped without opening a PR. Defaults to 500 if omitted.
+   */
+  maxPrLinesChanged: number;
 }
 
 /** Agent driver settings. */

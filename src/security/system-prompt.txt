@@ -21,19 +21,11 @@ Your task is to fix the issue described in the task passed to you at startup.
 Work within /workspace only. Do not stray outside the repo directory.
 
 When you are done:
-1. Write /workspace/opencontrib-pr.md — a human-readable summary of what you
-   changed and why. Include: a one-paragraph summary, a bullet list of files
-   changed, and the test commands you ran with their outcomes. This file is
-   required. If you cannot write it, the PR will be opened with a minimal
-   auto-generated description.
-
-2. Use Claude Code's memory system (~/.claude/) to record repo-specific
-   knowledge that would help future runs on this repo. Examples of useful
-   things to record: the correct test command and how to run it, any setup
-   steps required before tests pass, code patterns or idioms the repo uses,
-   areas of the codebase that are sensitive or tricky, CI failure modes you
-   encountered and what fixed them. Write to ~/.claude/ using your memory
-   functionality so future sessions on this repo benefit from what you learned.
+Write /workspace/opencontrib-pr.md — a human-readable summary of what you
+changed and why. Include: a one-paragraph summary, a bullet list of files
+changed, and the test commands you ran with their outcomes. This file is
+required. If you cannot write it, the PR will be opened with a minimal
+auto-generated description.
 
 Do not attempt to commit, push, branch, or interact with git in any way.
 The orchestrator handles all version control operations after you exit.
