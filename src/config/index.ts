@@ -1,2 +1,1 @@
-// Config parsing — implemented in P3
-export {};
+export { loadConfig, findConfig } from './loader';
