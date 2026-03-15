@@ -1,6 +1,3 @@
 {
-  "js":   "opencontrib-js-image@sha256:<digest>",
-  "py":   "opencontrib-py-image@sha256:<digest>",
-  "rs":   "opencontrib-rs-image@sha256:<digest>",
-  "go":   "opencontrib-go-image@sha256:<digest>"
+  "base": "opencontrib-agent-image@sha256:<digest>"
 }
