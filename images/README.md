@@ -40,6 +40,10 @@ Update `digests.json` with the output. The Docker management module reads this f
 
 `system-prompt.txt` is baked into the image at `/opencontrib/system-prompt.txt`. If the system prompt changes, the image must be rebuilt and `digests.json` updated — otherwise running containers will use the old prompt.
 
-## API key handling
+## Authentication
 
-The Claude Code CLI inside the container does **not** receive `ANTHROPIC_API_KEY` via environment variable. The key is never injected into agent containers. The delivery mechanism will be finalized in P7/P11 — the current approach under consideration is a volume-mounted config file at `/root/.claude/` (the same volume used for persistent agent memory).
+The Claude Code CLI authenticates via OAuth (subscription), not API key. Credentials live in `~/.claude/` on the host after `claude login` and must reach the container without bind-mounting the host filesystem.
+
+**Agreed approach (to be implemented in P4):** a dedicated shared named volume (`opencontrib-credentials`) is populated at `init` time from the host's `~/.claude/` credentials and mounted into every container at `/root/.claude/`. Per-repo agent memory (CLAUDE.md notes, etc.) lives in a separate per-repo volume mounted at a subpath (e.g. `/root/.claude/projects/<owner>/<repo>/`). OAuth tokens refresh in-place inside the shared volume so all containers stay current.
+
+`ANTHROPIC_API_KEY` is never injected into agent containers.
