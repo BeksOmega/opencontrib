@@ -17,12 +17,26 @@ export interface ConfigTargets {
 
 /** Nightly scheduling limits. */
 export interface ConfigSchedule {
-  /** Maximum number of new-issue jobs to run per nightly invocation. */
-  maxIssuesPerNight: number;
+  /**
+   * Local time (HH:MM, 24-hour) at which the orchestrator should run.
+   * Set by the init wizard to match the user's sleep time.
+   * Used to generate the cron entry during `opencontrib init`.
+   */
+  runAt: string;
+  /**
+   * Total number of new-issue jobs allowed across all repos per nightly run.
+   * Acts as an overall budget cap — even if many repos have eligible issues,
+   * the orchestrator stops after this many new-issue attempts.
+   */
+  maxNewIssues: number;
   /** Maximum number of PR follow-up jobs to run per nightly invocation. */
   maxFollowupsPerNight: number;
-  /** Maximum number of jobs per repo per nightly invocation. */
-  maxIssuesPerRepo: number;
+  /**
+   * Maximum number of new-issue jobs per individual repo per nightly run.
+   * Prevents the orchestrator from sending multiple PRs to the same repo
+   * in a single night, regardless of how many eligible issues it has.
+   */
+  maxNewIssuesPerRepo: number;
 }
 
 /** Autonomy settings controlling how PRs are opened. */
@@ -170,8 +184,8 @@ export interface JobState {
 export interface RunState {
   /** ISO date string (YYYY-MM-DD) for the current run day. Resets at midnight. */
   date: string;
-  /** Number of new-issue jobs attempted today. */
-  issuesAttempted: number;
+  /** Number of new-issue jobs attempted today (tracked against schedule.maxNewIssues). */
+  newIssuesAttempted: number;
   /** Number of PR follow-up jobs attempted today. */
   followupsAttempted: number;
   /** ISO timestamp of the last orchestrator run start. */
