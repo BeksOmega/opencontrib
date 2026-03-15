@@ -7,7 +7,7 @@ import { z } from 'zod';
  */
 export const RawConfigSchema = z.object({
   targets: z.object({
-    repos: z.array(z.string()),
+    repos: z.array(z.string().regex(/^[^*]+\/[^*]+$/, 'must be an explicit "owner/repo" — wildcards are not allowed')),
     languages: z.array(z.enum(['typescript', 'javascript', 'python', 'rust', 'go'])),
   }).strict(),
   schedule: z.object({

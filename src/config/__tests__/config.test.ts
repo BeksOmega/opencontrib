@@ -7,8 +7,8 @@ import { DEFAULT_AGENT, DEFAULT_AUTONOMY, DEFAULT_SCHEDULE } from '../defaults';
 const FULL_CONFIG_YAML = `
 targets:
   repos:
-    - "sindresorhus/*"
     - "owner/specific-repo"
+    - "another/repo"
   languages:
     - typescript
     - javascript
@@ -42,7 +42,7 @@ describe('parseConfig', () => {
   it('parses a fully-specified config correctly', () => {
     const config = parseConfig(FULL_CONFIG_YAML);
 
-    expect(config.targets.repos).toEqual(['sindresorhus/*', 'owner/specific-repo']);
+    expect(config.targets.repos).toEqual(['owner/specific-repo', 'another/repo']);
     expect(config.targets.languages).toEqual(['typescript', 'javascript']);
     expect(config.schedule.maxNewIssues).toBe(5);
     expect(config.schedule.maxFollowupsPerNight).toBe(4);
@@ -96,6 +96,15 @@ targets:
   languages: [typescript]
 autonomy:
   pr-mode: instant
+`;
+    expect(() => parseConfig(yaml)).toThrow(/invalid configuration/i);
+  });
+
+  it('throws a validation error for wildcard repo patterns', () => {
+    const yaml = `
+targets:
+  repos: ["sindresorhus/*"]
+  languages: [typescript]
 `;
     expect(() => parseConfig(yaml)).toThrow(/invalid configuration/i);
   });
