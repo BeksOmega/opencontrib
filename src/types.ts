@@ -195,6 +195,74 @@ export interface RunState {
 }
 
 // ---------------------------------------------------------------------------
+// GitHub API types (returned by src/github/ functions)
+// ---------------------------------------------------------------------------
+
+/** A comment on a GitHub issue. */
+export interface IssueComment {
+  /** Comment ID. */
+  id: number;
+  /** Comment author login. */
+  author: string;
+  /** Comment body text. */
+  body: string;
+  /** ISO timestamp when the comment was created. */
+  createdAt: string;
+  /** ISO timestamp when the comment was last updated. */
+  updatedAt: string;
+}
+
+/** A GitHub pull request as used internally. */
+export interface PR {
+  /** PR number. */
+  number: number;
+  /** PR title. */
+  title: string;
+  /** PR body text. */
+  body: string;
+  /** Current state of the PR. */
+  state: "open" | "closed";
+  /** Whether the PR is a draft. */
+  draft: boolean;
+  /** Head branch ref (e.g. "opencontrib/issue-123-fix"). */
+  headBranch: string;
+  /** Full URL to the PR on GitHub. */
+  url: string;
+  /** ISO timestamp when the PR was created. */
+  createdAt: string;
+}
+
+/** A review comment on a GitHub pull request. */
+export interface ReviewComment {
+  /** Comment ID. */
+  id: number;
+  /** Comment author login. */
+  author: string;
+  /** Comment body text. */
+  body: string;
+  /** Path of the file the comment is on. */
+  path: string;
+  /** Line number the comment is on, if applicable. */
+  line: number | null;
+  /** ISO timestamp when the comment was created. */
+  createdAt: string;
+}
+
+/** A single CI check run result for a ref. */
+export interface CheckRun {
+  /** Check run ID. */
+  id: number;
+  /** Name of the check run. */
+  name: string;
+  /** Overall status of the check run. */
+  status: "queued" | "in_progress" | "completed";
+  /** Conclusion once the check run has completed, or null if still running. */
+  conclusion: "success" | "failure" | "neutral" | "cancelled" | "skipped" | "timed_out" | "action_required" | null;
+  /** URL to the check run details on GitHub. */
+  url: string;
+}
+
+// ---------------------------------------------------------------------------
 // AgentResult (return value from an agent driver invocation)
 // ---------------------------------------------------------------------------
 
