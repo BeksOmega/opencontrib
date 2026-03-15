@@ -1,2 +1,12 @@
-// Docker container management — implemented in P5
-export {};
+export { dockerExec, DockerError } from "./exec";
+export {
+  createVolume,
+  deleteVolume,
+  volumeExists,
+  workspaceVolumeName,
+  memoryVolumeName,
+} from "./volumes";
+export { pullImage, imageExists, languageToImage } from "./images";
+export { runContainer, stopContainer } from "./containers";
+export type { RunContainerOpts } from "./containers";
+export { setupNetwork, verifyNetworkRules } from "./network";
