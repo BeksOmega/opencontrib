@@ -1,0 +1,3 @@
+{
+  "base": "opencontrib-agent-image@sha256:<digest>"
+}
