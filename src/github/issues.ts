@@ -11,6 +11,7 @@ interface RawIssue {
   comments: number;
   repository?: { stargazers_count: number };
   created_at: string;
+  pull_request?: unknown;
 }
 
 interface RawComment {
@@ -70,7 +71,7 @@ export function listIssues(
 ): Promise<Issue[]> {
   return client
     .get<RawIssue[]>(buildIssueQuery(owner, repo, opts))
-    .then((items) => items.map((raw) => rawToIssue(owner, repo, raw)));
+    .then((items) => items.filter((raw) => !raw.pull_request).map((raw) => rawToIssue(owner, repo, raw)));
 }
 
 export function getIssue(

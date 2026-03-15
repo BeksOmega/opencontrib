@@ -34,6 +34,16 @@ describe("listIssues", () => {
       commentCount: 3,
     });
   });
+
+  it("filters out pull requests", async () => {
+    const rawPR = { ...RAW_ISSUE, number: 2, title: "A PR", pull_request: { url: "https://..." } };
+    nock(BASE)
+      .get(/\/repos\/owner\/repo\/issues/)
+      .reply(200, [RAW_ISSUE, rawPR]);
+    const result = await listIssues(client, "owner", "repo", { state: "open" });
+    expect(result).toHaveLength(1);
+    expect(result[0].number).toBe(1);
+  });
 });
 
 describe("getIssue", () => {
