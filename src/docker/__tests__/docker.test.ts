@@ -64,6 +64,9 @@ import {
   volumeExists,
   workspaceVolumeName,
   memoryVolumeName,
+  credentialsVolumeName,
+  CLAUDE_CREDENTIALS_MOUNT,
+  CLAUDE_MEMORY_MOUNT,
 } from "../volumes";
 import { languageToImage } from "../images";
 import { runContainer, stopContainer } from "../containers";
@@ -86,6 +89,19 @@ describe("volumes", () => {
     expect(memoryVolumeName("octocat", "hello-world")).toBe(
       "opencontrib-mem-octocat-hello-world"
     );
+  });
+
+  test("credentialsVolumeName returns the single shared volume name", () => {
+    expect(credentialsVolumeName()).toBe("opencontrib-credentials");
+  });
+
+  test("CLAUDE_CREDENTIALS_MOUNT is /root/.claude", () => {
+    expect(CLAUDE_CREDENTIALS_MOUNT).toBe("/root/.claude");
+  });
+
+  test("CLAUDE_MEMORY_MOUNT is a subdirectory of CLAUDE_CREDENTIALS_MOUNT", () => {
+    expect(CLAUDE_MEMORY_MOUNT).toBe("/root/.claude/projects");
+    expect(CLAUDE_MEMORY_MOUNT.startsWith(CLAUDE_CREDENTIALS_MOUNT + "/")).toBe(true);
   });
 
   test("createVolume calls docker volume create <name>", async () => {
@@ -149,7 +165,8 @@ describe("runContainer", () => {
       image: "opencontrib-js-image",
       volumeMounts: [
         { volumeName: "opencontrib-octocat-hello-world", mountPath: "/workspace" },
-        { volumeName: "opencontrib-mem-octocat-hello-world", mountPath: "/root/.claude" },
+        { volumeName: "opencontrib-credentials", mountPath: CLAUDE_CREDENTIALS_MOUNT },
+        { volumeName: "opencontrib-mem-octocat-hello-world", mountPath: CLAUDE_MEMORY_MOUNT },
       ],
       network: "opencontrib-net",
       memoryLimit: "2g",
@@ -172,7 +189,8 @@ describe("runContainer", () => {
     expect(args).toContain("--network=opencontrib-net");
     // Volume mounts (docker -v syntax)
     expect(args).toContain("opencontrib-octocat-hello-world:/workspace");
-    expect(args).toContain("opencontrib-mem-octocat-hello-world:/root/.claude");
+    expect(args).toContain(`opencontrib-credentials:${CLAUDE_CREDENTIALS_MOUNT}`);
+    expect(args).toContain(`opencontrib-mem-octocat-hello-world:${CLAUDE_MEMORY_MOUNT}`);
     // Image
     expect(args).toContain("opencontrib-js-image");
     // Command

@@ -5,6 +5,9 @@ export {
   volumeExists,
   workspaceVolumeName,
   memoryVolumeName,
+  credentialsVolumeName,
+  CLAUDE_CREDENTIALS_MOUNT,
+  CLAUDE_MEMORY_MOUNT,
 } from "./volumes";
 export { pullImage, imageExists, languageToImage } from "./images";
 export { runContainer, stopContainer } from "./containers";

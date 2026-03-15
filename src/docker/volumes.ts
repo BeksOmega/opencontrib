@@ -9,10 +9,42 @@ export function workspaceVolumeName(owner: string, repo: string): string {
   return `opencontrib-${owner}-${repo}`;
 }
 
-/** Returns the Claude memory volume name for a given owner/repo. */
+/**
+ * Returns the per-repo Claude memory volume name (CLAUDE.md notes, project
+ * context, etc.). Mounted at CLAUDE_MEMORY_MOUNT, inside the credentials
+ * volume, so per-repo memory is isolated while credentials are shared.
+ */
 export function memoryVolumeName(owner: string, repo: string): string {
   return `opencontrib-mem-${owner}-${repo}`;
 }
+
+/**
+ * The single shared credentials volume name.
+ * Created once at `opencontrib init` by running `claude login` on the host
+ * and copying the resulting credentials into this volume. Mounted into every
+ * agent container at CLAUDE_CREDENTIALS_MOUNT so the Claude Code CLI can use
+ * the user's subscription credits rather than API credits.
+ */
+export function credentialsVolumeName(): string {
+  return "opencontrib-credentials";
+}
+
+// ---------------------------------------------------------------------------
+// Mount path constants
+// ---------------------------------------------------------------------------
+
+/**
+ * Container path where the shared credentials volume is mounted.
+ * Claude Code reads its login credentials from this directory.
+ */
+export const CLAUDE_CREDENTIALS_MOUNT = "/root/.claude";
+
+/**
+ * Container path where the per-repo memory volume is mounted.
+ * Must be a subdirectory of CLAUDE_CREDENTIALS_MOUNT so Docker overlays it
+ * on top of the credentials mount without disturbing credential files.
+ */
+export const CLAUDE_MEMORY_MOUNT = "/root/.claude/projects";
 
 // ---------------------------------------------------------------------------
 // Volume lifecycle
