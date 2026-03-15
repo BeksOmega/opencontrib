@@ -12,13 +12,19 @@ const NETWORK_NAME = "opencontrib-net";
  * traffic we explicitly permit before dropping everything else.
  */
 const ALLOWED_HOSTS = [
+  // Source control
   "github.com",
   "api.github.com",
+  // Package registries
   "registry.npmjs.org",
   "pypi.org",
   "crates.io",
   "proxy.golang.org",
-  "anthropic.com",
+  // AI model APIs (one entry per supported driver)
+  "api.anthropic.com",           // Claude Code driver
+  "generativelanguage.googleapis.com", // Gemini CLI driver (REST API)
+  "aiplatform.googleapis.com",   // Gemini CLI driver (Vertex AI)
+  "api.openai.com",              // Codex driver
 ];
 
 /**
