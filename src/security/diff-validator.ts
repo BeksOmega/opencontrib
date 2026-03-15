@@ -12,8 +12,8 @@ const CI_CONFIG_PATTERNS: RegExp[] = [
   /^Makefile$/,
   /^\.travis\.yml$/,
   /^circle\.yml$/,
-  /^\.circleci\//,
-  /^Jenkinsfile$/,
+  /^\.?circleci\//,
+  /^Jenkinsfile(\..*)?$/,
   /^azure-pipelines\.yml$/,
 ];
 

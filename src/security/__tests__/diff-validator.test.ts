@@ -95,6 +95,41 @@ describe('validateDiff', () => {
     expect(result.violations.some(v => v.includes('Makefile'))).toBe(true);
   });
 
+  test('diff touching .github/workflows/ → violation', () => {
+    const diff = makeDiff([{ path: '.github/workflows/release.yml', added: ['  - run: echo'] }]);
+    const result = validateDiff(diff);
+    expect(result.valid).toBe(false);
+    expect(result.violations.some(v => v.includes('.github/workflows/release.yml'))).toBe(true);
+  });
+
+  test('diff touching Jenkinsfile → violation', () => {
+    const diff = makeDiff([{ path: 'Jenkinsfile', added: ['pipeline {'] }]);
+    const result = validateDiff(diff);
+    expect(result.valid).toBe(false);
+    expect(result.violations.some(v => v.includes('Jenkinsfile'))).toBe(true);
+  });
+
+  test('diff touching Jenkinsfile.groovy → violation', () => {
+    const diff = makeDiff([{ path: 'Jenkinsfile.groovy', added: ['pipeline {'] }]);
+    const result = validateDiff(diff);
+    expect(result.valid).toBe(false);
+    expect(result.violations.some(v => v.includes('Jenkinsfile.groovy'))).toBe(true);
+  });
+
+  test('diff touching .circleci/config.yml → violation', () => {
+    const diff = makeDiff([{ path: '.circleci/config.yml', added: ['version: 2'] }]);
+    const result = validateDiff(diff);
+    expect(result.valid).toBe(false);
+    expect(result.violations.some(v => v.includes('.circleci/config.yml'))).toBe(true);
+  });
+
+  test('diff touching circleci/config.yml (no leading dot) → violation', () => {
+    const diff = makeDiff([{ path: 'circleci/config.yml', added: ['version: 2'] }]);
+    const result = validateDiff(diff);
+    expect(result.valid).toBe(false);
+    expect(result.violations.some(v => v.includes('circleci/config.yml'))).toBe(true);
+  });
+
   test('diff with Binary files line → violation', () => {
     const diff = 'Binary files a/image.png and b/image.png differ';
     const result = validateDiff(diff);
